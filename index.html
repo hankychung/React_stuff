@@ -14,17 +14,69 @@
 </body>
 <script type="text/babel">
   const root = document.getElementById('root')  
+
+  class Child extends React.Component {
+    constructor(...args) {
+      super(...args)
+      this.state = {
+        num: 111
+      }
+    }
+
+    add(n) {
+      this.setState({
+        num: this.state.num + n
+      })
+    }
+    use() {
+      this.props.parent.addAge(20)
+    }
+    
+    render() {
+      return (
+        <div>{this.state.num} <div><input value="child use parent" onClick={this.use.bind(this)} type="button" /></div></div>
+      )
+    }
+  }
   
   class MyCmp extends React.Component {
     constructor (...args) {
       super(...args)
+      this.name="jan"
+      this.state = {
+        age: 18
+      }
     }
+
+    addAge(n) {
+      this.setState({
+        age: this.state.age + n,
+        name: this.name
+      })
+      console.log(this)
+    }
+
+    fn() {
+      console.log('ok')
+      console.log(this.refs.child)
+      this.refs.child.add(10)
+      // this.state.age ++
+      // console.log(this.state.age)
+    }
+    
     render() {
-      return (<div>I am cmp! CHECK IT!</div>)
+      console.log(this)
+      console.log(this.props)
+      return (<div>
+        <input type="button"  value="add 1" onClick={this.fn.bind(this)} />
+        <div>{this.state.age}</div>
+        <div>{[<div key='aaa'>aaa</div>, <div key='bbb'>bbb</div>]}</div>
+        <Child ref="child" parent={this} />
+      </div>)
     }
   }
 
-  ReactDOM.render(<div>Hello World!<MyCmp /></div>, root)
+  ReactDOM.render(<div>Hello World!<MyCmp account={100} name="han" /></div>, root)
   
 </script>
 </html>
